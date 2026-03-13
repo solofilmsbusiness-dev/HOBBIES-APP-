@@ -1,0 +1,167 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hobbiest App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lobster&display=swap"
+        rel="stylesheet"
+    />
+    <style>
+        :root {
+            /* Default to dark theme */
+            --background-primary: #000000;
+            --background-secondary: #1C1C1E;
+            --background-tertiary: #2C2C2E;
+            --card: #1C1C1E;
+            --text-primary: #FFFFFF;
+            --text-secondary: #E5E5EA;
+            --text-tertiary: #8E8E93;
+            --border: #38383A;
+            --accent: #FFD60A;
+            --accent-rgb: 255, 214, 10;
+            --accent-text: #000000;
+            --primary-button: #FFFFFF;
+            --primary-button-text: #000000;
+            --primary-button-hover: #E5E5EA;
+            --tab-bar: #1C1C1E;
+            --tab-bar-active: #FFFFFF;
+            --tab-bar-inactive: #8E8E93;
+            --tab-bar-hover: #E5E5EA;
+            --shadow-color: rgba(0, 0, 0, 0.5);
+            --motion-duration: 0.3s;
+        }
+
+        [data-theme='light'] {
+            --background-primary: #F2F2F7;
+            --background-secondary: #FFFFFF;
+            --background-tertiary: #E5E5EA;
+            --card: #FFFFFF;
+            --text-primary: #000000;
+            --text-secondary: #3C3C43;
+            --text-tertiary: #8A8A8E;
+            --border: #C6C6C8;
+            --accent: #007AFF;
+            --accent-rgb: 0, 122, 255;
+            --accent-text: #FFFFFF;
+            --primary-button: #000000;
+            --primary-button-text: #FFFFFF;
+            --primary-button-hover: #2C2C2E;
+            --tab-bar: #FFFFFF;
+            --tab-bar-active: #000000;
+            --tab-bar-inactive: #8A8A8E;
+            --tab-bar-hover: #3C3C43;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+        
+        [data-theme='slick'] {
+            --background-primary: #121212;
+            --background-secondary: #1E1E1E;
+            --background-tertiary: #2A2A2A;
+            --card: #1E1E1E;
+            --text-primary: #EAEAEA;
+            --text-secondary: #B3B3B3;
+            --text-tertiary: #7F7F7F;
+            --border: #333333;
+            --accent: #34D399; /* Emerald Green */
+            --accent-rgb: 52, 211, 153;
+            --accent-text: #FFFFFF;
+            --primary-button: #34D399;
+            --primary-button-text: #FFFFFF;
+            --primary-button-hover: #2aa879;
+            --tab-bar: #1E1E1E;
+            --tab-bar-active: #34D399;
+            --tab-bar-inactive: #7F7F7F;
+            --tab-bar-hover: #EAEAEA;
+            --shadow-color: rgba(0, 0, 0, 0.2);
+        }
+        
+        .bg-background-primary { background-color: var(--background-primary); }
+        .bg-background-secondary { background-color: var(--background-secondary); }
+        .bg-background-tertiary { background-color: var(--background-tertiary); }
+        .bg-card { background-color: var(--card); }
+        .text-text-primary { color: var(--text-primary); }
+        .text-text-secondary { color: var(--text-secondary); }
+        .text-text-tertiary { color: var(--text-tertiary); }
+        .border-border { border-color: var(--border); }
+        .bg-accent { background-color: var(--accent); }
+        .text-accent { color: var(--accent); }
+        .accent-accent { accent-color: var(--accent); }
+        .text-accent-text { color: var(--accent-text); }
+        .bg-primary-button { background-color: var(--primary-button); }
+        .text-primary-button-text { color: var(--primary-button-text); }
+        .hover\\:bg-primary-button-hover:hover { background-color: var(--primary-button-hover); }
+        .bg-tab-bar { background-color: var(--tab-bar); }
+        .text-tab-bar-active { color: var(--tab-bar-active); }
+        .text-tab-bar-inactive { color: var(--tab-bar-inactive); }
+        .hover\\:text-tab-bar-hover:hover { color: var(--tab-bar-hover); }
+        .focus\\:ring-accent:focus { --tw-ring-color: var(--accent); }
+
+        [data-reduced-motion="true"] * {
+            animation-duration: 0.001s !important;
+            transition-duration: 0.001s !important;
+        }
+
+        @keyframes fade-in-down { 0% { opacity: 0; transform: translate(-50%, -20px); } 100% { opacity: 1; transform: translate(-50%, 0); } }
+        @keyframes fade-in-up { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
+        @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slide-up { from { transform: translateY(100%); } to { translateY(0); } }
+        @keyframes pop-in { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        
+        .animate-fade-in-down { animation: fade-in-down 0.5s ease-out forwards; }
+        .animate-pulse { animation: pulse 0.5s ease-in-out; }
+
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.3); } }
+        
+        .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        
+        .animate-fade-in-up { animation: fade-in-up 0.6s ease-out forwards; opacity: 0; animation-fill-mode: forwards; }
+        .animate-fade-in { animation: fade-in 0.3s ease-out forwards; }
+        .animate-slide-up { animation: slide-up 0.4s ease-out forwards; }
+        .animate-pop-in { animation: pop-in 0.3s ease-out forwards; }
+
+        @property --angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+        @keyframes holographic-spin { to { --angle: 360deg; } }
+        .holographic-border { border: 2px solid; border-image: conic-gradient(from var(--angle), #00f, #f0f, #0ff, #ff0, #0f0, #f00, #00f) 1; animation: holographic-spin 2s linear infinite; }
+        
+        @keyframes zoom-in { from { transform: scale(1); } to { transform: scale(1.1); } }
+        .animate-zoom-in { animation: zoom-in 20s ease-in-out infinite alternate; }
+        
+        .hover-lift { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .hover-lift:hover { transform: translateY(-5px); box-shadow: 0 10px 20px var(--shadow-color); }
+        
+        @keyframes shuffle { 0% { transform: translateY(0) rotate(0); } 20% { transform: translateY(-10px) rotate(-2deg); } 40% { transform: translateY(0) rotate(2deg); } 60% { transform: translateY(-5px) rotate(-1deg); } 80% { transform: translateY(0) rotate(1deg); } 100% { transform: translateY(0) rotate(0); } }
+        .animate-shuffle { animation: shuffle 0.5s ease-in-out; }
+        
+        @keyframes pulse-deck-icon { 0% { transform: scale(1); } 50% { transform: scale(1.3); } 100% { transform: scale(1); } }
+        .animate-pulse-deck { animation: pulse-deck-icon 0.3s ease-in-out; }
+
+        @keyframes glow { from { box-shadow: 0 0 15px 5px rgba(var(--accent-rgb), 0.7); } to { box-shadow: 0 0 0 0 rgba(var(--accent-rgb), 0); } }
+        .animate-glow { animation: glow 1.5s ease-out; }
+        
+        .perspective { perspective: 1000px; }
+        .card-flipper { position: relative; width: 100%; height: 100%; transition: transform 0.8s; transform-style: preserve-3d; }
+        .is-flipped { transform: rotateY(180deg); }
+        .card-face { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: 1rem; overflow: hidden; }
+        .card-back { transform: rotateY(180deg); background-color: var(--background-secondary); border: 1px solid var(--border); }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.1",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.1/",
+    "react/": "https://aistudiocdn.com/react@^19.2.1/"
+  }
+}
+</script>
+</head>
+<body>
+    <div id="root"></div>
+</body>
+</html>
