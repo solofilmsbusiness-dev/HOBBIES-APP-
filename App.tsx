@@ -17,8 +17,9 @@ import SettingsScreen from './screens/main/SettingsScreen';
 import ChatScreen from './screens/main/ChatScreen';
 import NewMessageScreen from './screens/main/NewMessageScreen';
 import ChallengeScreen from './screens/main/ChallengeScreen';
-import type { NavigationStackItem, User, Post, Message, Story, Challenge, DeckItem } from './types';
-import { FRIENDS_DATA, MESSAGES_DATA, INITIAL_HOBBY_DATA, STORIES_DATA, CHALLENGES_DATA } from './constants';
+import NotificationsScreen from './screens/main/NotificationsScreen';
+import type { NavigationStackItem, User, Post, Message, Story, Challenge, DeckItem, Notification, EventRSVP } from './types';
+import { FRIENDS_DATA, MESSAGES_DATA, INITIAL_HOBBY_DATA, STORIES_DATA, CHALLENGES_DATA, NOTIFICATIONS_DATA } from './constants';
 
 const AppContent: React.FC = () => {
     const [navigationStack, setNavigationStack] = useState<NavigationStackItem[]>([{ view: 'welcome', props: {} }]);
@@ -33,6 +34,8 @@ const AppContent: React.FC = () => {
         { id: 104, title: 'Gardening', points: 25, image: 'https://images.unsplash.com/photo-1491147334573-44cbb4602074?q=80&w=800', color: '#34d399', description: 'Learn the basics of urban gardening and take home your own plant.', location: 'Community Garden', time: 'Saturdays, 10am', status: 'pending' },
     ]);
     const [messages, setMessages] = useState<Message[]>(MESSAGES_DATA);
+    const [notifications, setNotifications] = useState<Notification[]>(NOTIFICATIONS_DATA);
+    const [rsvps, setRsvps] = useState<EventRSVP[]>([]);
     const [currentUser, setCurrentUser] = useState<User>({
         id: 'currentUser', name: 'Hobbiest Owner', username: 'HobbiestCEO', avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=200', banner: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=800', bio: 'Just a person exploring new hobbies and passions! Loving life and creating every day.', hobbies: ['Filmmaker', 'Traveling', 'Photography'], primaryHobby: { name: 'Filmmaker', descriptor: 'Creative' }, friendCount: 10, followerCount: '25k', friends: ['f1', 'f3'], pendingFriends: ['f2', 'f4'], outgoingRequests: [], posts: [], completedHobbies: 7,
         deck: [
@@ -151,24 +154,30 @@ const AppContent: React.FC = () => {
         if (!chatExists) {
             const friend = allUsers.find(f => f.id === userId);
             if (friend) {
-                setMessages(prev => [{ id: `m-${Date.now()}`, userId: friend.id, name: friend.name, avatar: friend.avatar, lastMessage: "You can start the conversation!", unread: false }, ...prev]);
+                setMessages(prev => [{ id: `m-${Date.now()}`, userId: friend.id, name: friend.name, avatar: friend.avatar, lastMessage: "Start the conversation!", unread: false, messages: [] }, ...prev]);
             }
         }
         handleViewChat(userId);
     };
 
+    const handleChatMessage = (userId: string, text: string) => {
+        const newMsg = { id: `cm-${Date.now()}`, senderId: 'currentUser', text, timestamp: Date.now(), read: false };
+        setMessages(prev => prev.map(m => m.userId === userId ? { ...m, lastMessage: text, messages: [...(m.messages || []), newMsg] } : m));
+    };
+
     const handleSendMessage = (friend: User, text: string) => {
+        const newMsg = { id: `cm-${Date.now()}`, senderId: 'currentUser', text, timestamp: Date.now(), read: false };
         const existingChatIndex = messages.findIndex(m => m.userId === friend.id);
         if (existingChatIndex > -1) {
             setMessages(prev => {
                 const newMessages = [...prev];
-                const chat = { ...newMessages[existingChatIndex], lastMessage: text, unread: false };
+                const chat = { ...newMessages[existingChatIndex], lastMessage: text, unread: false, messages: [...(newMessages[existingChatIndex].messages || []), newMsg] };
                 newMessages.splice(existingChatIndex, 1);
                 newMessages.unshift(chat);
                 return newMessages;
             });
         } else {
-            setMessages(prev => [{ id: `m-${Date.now()}`, userId: friend.id, name: friend.name, avatar: friend.avatar, lastMessage: text, unread: false }, ...prev]);
+            setMessages(prev => [{ id: `m-${Date.now()}`, userId: friend.id, name: friend.name, avatar: friend.avatar, lastMessage: text, unread: false, messages: [newMsg] }, ...prev]);
         }
         goBack();
         showToast(`Message sent to ${friend.name}`);
@@ -219,6 +228,40 @@ const AppContent: React.FC = () => {
         }, 1500);
     };
 
+    const handleRSVP = (hobbyId: number | string, status: 'going' | 'interested' | 'not_going') => {
+        setRsvps(prev => {
+            const existing = prev.findIndex(r => r.hobbyId === hobbyId);
+            const entry: EventRSVP = { hobbyId, status, rsvpDate: Date.now() };
+            if (existing > -1) {
+                const updated = [...prev];
+                updated[existing] = entry;
+                return updated;
+            }
+            return [...prev, entry];
+        });
+        const labels = { going: "You're going!", interested: "Marked as interested", not_going: "RSVP removed" };
+        showToast(labels[status]);
+    };
+
+    const handleMarkNotificationRead = (id: string) => {
+        setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: true } : n));
+    };
+    const handleMarkAllNotificationsRead = () => {
+        setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+    };
+    const handleNotificationAction = (notification: Notification) => {
+        switch (notification.type) {
+            case 'friend_request': navigateTo('social', { initialTab: 'Friends' }); break;
+            case 'friend_accept': break;
+            case 'challenge': break;
+            case 'event_reminder': navigateTo('discover'); break;
+            case 'hobby_suggestion': navigateTo('discover'); break;
+            default: break;
+        }
+    };
+
+    const unreadNotificationCount = useMemo(() => notifications.filter(n => !n.read).length, [notifications]);
+
     useEffect(() => {
         if (!isToastVisible) return;
         const timer = setTimeout(() => setIsToastVisible(false), 3000);
@@ -234,13 +277,14 @@ const AppContent: React.FC = () => {
             case 'welcome': return <WelcomeScreen onGoToLogin={() => navigateTo('login')} onGoToCreateAccount={() => navigateTo('createAccount')} />;
             case 'login': return <LoginScreen onSignIn={handleSignIn} onGoToCreateAccount={() => navigateTo('createAccount')} />;
             case 'createAccount': return <CreateAccountScreen onAccountCreate={handleSignIn} onBack={goBack} />;
-            case 'discover': return <DiscoverScreen onBook={handleAddToDeck} showToast={showToast} deckItems={deckItems} animatingHobbyId={null} />;
+            case 'discover': return <DiscoverScreen onBook={handleAddToDeck} showToast={showToast} deckItems={deckItems} animatingHobbyId={null} userHobbies={currentUser.hobbies} rsvps={rsvps} onRSVP={handleRSVP} />;
             case 'create': return <CreateScreen onBook={handleAddToDeck} hobbyData={hobbyData} onHobbyCreate={handleCreateHobby} deckItems={deckItems} animatingHobbyId={null} />;
-            case 'social': return <SocialScreen onViewProfile={onViewProfile} deckItems={deckItems} onRemoveFromDeck={handleRemoveFromDeck} onReorderDeckItems={handleReorderDeckItems} messages={messages} onViewChat={handleViewChat} requests={friendRequests} outgoingRequests={outgoingRequestsUsers} onFriendAction={handleFriendAction} badgeCounts={badgeCounts} initialTab={props.initialTab} showToast={showToast} onComposeNew={() => navigateTo('newMessage')} onAvatarClick={setExpandedAvatar} newlyAddedDeckItemId={newlyAddedDeckItemId} allUsers={allUsers} posts={posts} onToggleLike={handleToggleLike} onAddComment={handleAddComment} onNewPost={handleNewPost} onToggleBookmark={handleToggleBookmark} onImageClick={handleImageClick} stories={stories} onStoryClick={() => {}} challenges={challenges} onChallengeClick={onChallengeClick} />;
+            case 'social': return <SocialScreen onViewProfile={onViewProfile} deckItems={deckItems} onRemoveFromDeck={handleRemoveFromDeck} onReorderDeckItems={handleReorderDeckItems} messages={messages} onViewChat={handleViewChat} requests={friendRequests} outgoingRequests={outgoingRequestsUsers} onFriendAction={handleFriendAction} badgeCounts={badgeCounts} initialTab={props.initialTab} showToast={showToast} onComposeNew={() => navigateTo('newMessage')} onAvatarClick={setExpandedAvatar} newlyAddedDeckItemId={newlyAddedDeckItemId} allUsers={allUsers} posts={posts} onToggleLike={handleToggleLike} onAddComment={handleAddComment} onNewPost={handleNewPost} onToggleBookmark={handleToggleBookmark} onImageClick={handleImageClick} stories={stories} onStoryClick={() => {}} challenges={challenges} onChallengeClick={onChallengeClick} onNotifications={() => navigateTo('notifications')} unreadNotificationCount={unreadNotificationCount} />;
             case 'points': return <PointsScreen deckItems={deckItems} setDeckItems={setDeckItems} showToast={showToast} />;
             case 'profile': return <ProfileScreen userId={props.userId || currentUser.id} onBack={goBack} onMessage={handleStartChat} friendshipStatus={friendshipStatus} onFriendAction={handleFriendAction} onViewProfile={onViewProfile} allUsers={allUsers} currentUser={currentUser} onGoToSettings={() => navigateTo('settings')} posts={posts} onToggleLike={handleToggleLike} onAddComment={handleAddComment} onToggleBookmark={handleToggleBookmark} onImageClick={handleImageClick} onUpdateUser={handleUpdateUser} onAvatarClick={setExpandedAvatar} showToast={showToast} onNewPost={handleNewPost} />;
             case 'settings': return <SettingsScreen showToast={showToast} currentUser={currentUser} onUpdateUser={handleUpdateUser} onBack={goBack} />;
-            case 'chat': const chat = messages.find(msg => msg.userId === props.userId); return <ChatScreen chat={chat} onBack={goBack} showToast={showToast} allUsers={allUsers} />;
+            case 'notifications': return <NotificationsScreen notifications={notifications} onBack={goBack} onMarkRead={handleMarkNotificationRead} onMarkAllRead={handleMarkAllNotificationsRead} onNotificationAction={handleNotificationAction} />;
+            case 'chat': const chat = messages.find(msg => msg.userId === props.userId); return <ChatScreen chat={chat} onBack={goBack} onSendMessage={handleChatMessage} showToast={showToast} allUsers={allUsers} />;
             case 'newMessage': return <NewMessageScreen onBack={goBack} onSend={handleSendMessage} friends={FRIENDS_DATA} />;
             case 'challenge': return <ChallengeScreen challengeId={props.challengeId} onBack={goBack} allUsers={allUsers} challenges={challenges} onVote={handleVote} onSubmitPhoto={handleSubmitPhoto} currentUser={currentUser} showToast={showToast} />;
             default: return <WelcomeScreen onGoToLogin={() => navigateTo('login')} onGoToCreateAccount={() => navigateTo('createAccount')} />;

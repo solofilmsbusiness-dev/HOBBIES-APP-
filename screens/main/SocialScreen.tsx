@@ -33,6 +33,8 @@ interface SocialScreenProps {
     onStoryClick: (userId: string) => void;
     challenges: Challenge[];
     onChallengeClick: (challengeId: string) => void;
+    onNotifications?: () => void;
+    unreadNotificationCount?: number;
 }
 
 const SocialScreen: React.FC<SocialScreenProps> = (props) => {
@@ -86,7 +88,7 @@ const SocialScreen: React.FC<SocialScreenProps> = (props) => {
     const TabButton: React.FC<{ name: string; badgeCount?: number }> = ({ name, badgeCount }) => (
         <button
             onClick={() => setActiveSubTab(name)}
-            className={`relative w-full text-center py-2 rounded-full text-sm font-semibold transition-colors ${activeSubTab === name ? 'bg-background-tertiary text-text-primary' : 'text-text-secondary hover:text-text-primary'}`}
+            className={`relative w-full text-center py-2 rounded-full text-sm font-semibold transition-all ${activeSubTab === name ? 'bg-accent/15 text-accent' : 'text-text-secondary hover:text-text-primary'}`}
         >
             {name}
             {badgeCount && badgeCount > 0 && (
@@ -101,13 +103,27 @@ const SocialScreen: React.FC<SocialScreenProps> = (props) => {
         <div className="relative w-full h-full bg-background-primary text-text-primary">
             <img src="https://images.unsplash.com/photo-1487958449943-2429e8be8625?q=80&w=2070&auto=format&fit=crop" className="absolute inset-0 w-full h-full object-cover opacity-10" alt="Hobby background" />
             <main className="relative z-10 overflow-y-auto p-4 pt-12 pb-24 h-full">
-                <div className="text-center">
-                    <h1 className="text-4xl" style={{ fontFamily: '"Lobster", cursive' }}>
-                        {headerText}
-                    </h1>
-                    <p className="text-text-secondary mt-1 text-sm">
-                        Your community and connections
-                    </p>
+                <div className="mb-2">
+                    <div className="flex items-start justify-between">
+                        <div>
+                            <span className="badge-pill mb-3 inline-flex">Your Community</span>
+                            <h1 className="text-3xl font-black" style={{ fontFamily: '"Inter", sans-serif' }}>
+                                {headerText}
+                            </h1>
+                        </div>
+                        {props.onNotifications && (
+                            <button onClick={props.onNotifications} className="relative mt-1 w-10 h-10 rounded-full bg-background-secondary flex items-center justify-center hover:bg-card transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                </svg>
+                                {(props.unreadNotificationCount || 0) > 0 && (
+                                    <span className="absolute -top-0.5 -right-0.5 bg-red-500 text-white text-[10px] font-bold rounded-full h-4.5 w-4.5 min-w-[18px] h-[18px] flex items-center justify-center">
+                                        {props.unreadNotificationCount}
+                                    </span>
+                                )}
+                            </button>
+                        )}
+                    </div>
                 </div>
                 <div className="my-4 p-1 bg-card rounded-full flex justify-between items-center gap-1">
                     {subTabs.map((tab) => (

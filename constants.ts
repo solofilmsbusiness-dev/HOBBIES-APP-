@@ -1,5 +1,5 @@
 
-import type { User, Message, Story, Challenge, DiscoverHobby } from './types';
+import type { User, Message, Story, Challenge, DiscoverHobby, Notification } from './types';
 
 export const FRIENDS_DATA: User[] = [
     { id: 'f1', name: 'Alex Doe', username: 'alexdoe', avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200', banner: 'https://images.unsplash.com/photo-1551632811-561732d1e306?q=80&w=800', bio: 'Enthusiast of all things outdoors. Capturing moments one hike at a time.', primaryHobby: { name: 'Hiking', descriptor: 'Trails' }, hobbies: ['Hiking', 'Photography', 'Camping'], friendCount: 120, followerCount: 250, completedHobbies: 12, deck: [{ id: 101, title: 'Photography', points: 100, image: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=800', color: '#4ade80', status: 'completed', description: '', location: '', time: '' }], posts: [{ id: 'p1', userId: 'f1', user: 'alexdoe', text: "Just finished a great hike this morning!", image: 'https://images.unsplash.com/photo-1551632811-561732d1e306?q=80&w=800', likes: 45, liked: false, comments: [] },] },
@@ -20,10 +20,37 @@ export const FRIENDS_DATA: User[] = [
     { id: 'f16', name: 'Star Gazer', username: 'stargazer', avatar: 'https://images.unsplash.com/photo-1504333638930-c8787321eee0?q=80&w=200', banner: 'https://images.unsplash.com/photo-1534237716526-44a191f49b8d?q=80&w=900', bio: 'Looking up at the cosmos.', primaryHobby: { name: 'Astronomy', descriptor: 'General' }, hobbies: ['Astronomy', 'Astrophotography'], friendCount: 120, followerCount: 600, completedHobbies: 10, posts: [] },
 ];
 
+const now = Date.now();
 export const MESSAGES_DATA: Message[] = [
-    { id: 'm1', userId: 'f1', name: 'Alex Doe', avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200', lastMessage: "Hey, are we still on for the hike this weekend?", unread: true },
-    { id: 'm2', userId: 'f2', name: 'Jane Smith', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200', lastMessage: "Loved your latest post! That painting is amazing.", unread: false },
-    { id: 'm4', userId: 'f4', name: 'Casey Lee', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200', lastMessage: "You have to send me that recipe! Looks delicious.", unread: true },
+    { id: 'm1', userId: 'f1', name: 'Alex Doe', avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200', lastMessage: "Hey, are we still on for the hike this weekend?", unread: true, messages: [
+        { id: 'cm1', senderId: 'f1', text: "Hey! How are you doing?", timestamp: now - 3600000 * 3, read: true },
+        { id: 'cm2', senderId: 'currentUser', text: "Hey Alex! I'm great, just got back from a photography walk.", timestamp: now - 3600000 * 2.5, read: true },
+        { id: 'cm3', senderId: 'f1', text: "Nice! I saw the photos, they looked amazing.", timestamp: now - 3600000 * 2, read: true },
+        { id: 'cm4', senderId: 'currentUser', text: "Thanks! I'm thinking of doing more this weekend.", timestamp: now - 3600000 * 1.5, read: true },
+        { id: 'cm5', senderId: 'f1', text: "Hey, are we still on for the hike this weekend?", timestamp: now - 600000, read: false },
+    ]},
+    { id: 'm2', userId: 'f2', name: 'Jane Smith', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200', lastMessage: "Loved your latest post! That painting is amazing.", unread: false, messages: [
+        { id: 'cm6', senderId: 'currentUser', text: "Hey Jane! Just saw your new painting series.", timestamp: now - 86400000, read: true },
+        { id: 'cm7', senderId: 'f2', text: "Thank you!! I spent weeks on the abstract one.", timestamp: now - 86400000 + 3600000, read: true },
+        { id: 'cm8', senderId: 'currentUser', text: "It shows. The colors are incredible.", timestamp: now - 86400000 + 7200000, read: true },
+        { id: 'cm9', senderId: 'f2', text: "Loved your latest post! That painting is amazing.", timestamp: now - 86400000 + 10800000, read: true },
+    ]},
+    { id: 'm4', userId: 'f4', name: 'Casey Lee', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200', lastMessage: "You have to send me that recipe! Looks delicious.", unread: true, messages: [
+        { id: 'cm10', senderId: 'f4', text: "That dish you posted today looked SO good!", timestamp: now - 7200000, read: true },
+        { id: 'cm11', senderId: 'currentUser', text: "Haha thanks! It was actually pretty easy to make.", timestamp: now - 5400000, read: true },
+        { id: 'cm12', senderId: 'f4', text: "You have to send me that recipe! Looks delicious.", timestamp: now - 3600000, read: false },
+    ]},
+];
+
+export const NOTIFICATIONS_DATA: Notification[] = [
+    { id: 'n1', type: 'like', title: 'Jane Smith liked your post', body: '"My new painting. What do you guys think?"', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200', timestamp: now - 300000, read: false },
+    { id: 'n2', type: 'comment', title: 'Alex Doe commented', body: '"Great shot! The composition is perfect."', avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200', timestamp: now - 1800000, read: false },
+    { id: 'n3', type: 'friend_request', title: 'Sam Wilson sent you a friend request', body: 'You have 2 mutual hobbies', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200', timestamp: now - 3600000, read: false },
+    { id: 'n4', type: 'challenge', title: 'Photography Challenge ending soon!', body: 'Golden Hour Glow \u2014 Submit your entry before it closes.', timestamp: now - 7200000, read: true },
+    { id: 'n5', type: 'event_reminder', title: 'Yoga in the Park starts tomorrow', body: 'City Park \u2022 Sundays, 10am \u2014 21 people going', timestamp: now - 14400000, read: true },
+    { id: 'n6', type: 'hobby_suggestion', title: 'New hobby near you!', body: 'Photography Workshop at Cityscape Views \u2014 Trending now!', timestamp: now - 28800000, read: true },
+    { id: 'n7', type: 'friend_accept', title: 'Casey Lee accepted your friend request', body: 'You can now message each other.', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200', timestamp: now - 86400000, read: true },
+    { id: 'n8', type: 'like', title: 'Hiker Life and 12 others liked your post', body: '"Another mountain conquered!"', avatar: 'https://images.unsplash.com/photo-1500522144261-ea64433bbe27?q=80&w=200', timestamp: now - 86400000 * 2, read: true },
 ];
 
 export const INITIAL_HOBBY_DATA = [

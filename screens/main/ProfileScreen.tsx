@@ -7,6 +7,13 @@ import { GearIcon, TrophyIcon } from '../../components/common/Icons';
 import type { User, FriendshipStatus, Post } from '../../types';
 import { FRIENDS_DATA } from '../../constants';
 
+const HOBBY_COLORS: Record<string, string> = {
+    Photography: '#B8FF00', Painting: '#f472b6', Hiking: '#34d399', Coding: '#818cf8',
+    Cooking: '#fbbf24', Yoga: '#f472b6', Gaming: '#818cf8', Baking: '#fbbf24',
+    Pottery: '#fb923c', Knitting: '#a78bfa', Reading: '#67e8f9', Writing: '#a78bfa',
+    Gardening: '#34d399', Music: '#f472b6', Movies: '#818cf8', Astronomy: '#67e8f9',
+};
+
 interface ProfileHeaderProps {
     user: User;
     isCurrentUser: boolean;
@@ -63,6 +70,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user, isCurrentUser, file
                 <div className="absolute -bottom-12 left-1/2 -translate-x-1/2">
                     <div className="relative">
                         <img src={user.avatar} alt={user.name} className="w-24 h-24 rounded-full object-cover border-4 border-background-primary" />
+                        <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-green-400 ring-3 ring-background-primary" />
                         {isCurrentUser && (
                             <>
                                 <input type="file" accept="image/*" className="hidden" ref={fileInputRef} onChange={handlePhotoUpload} />
@@ -79,11 +87,14 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user, isCurrentUser, file
                 <p className="text-text-secondary">@{user.username}</p>
                 <p className="text-sm text-text-primary mt-2 max-w-md mx-auto">{user.bio}</p>
                 <div className="flex justify-center gap-2 mt-3 flex-wrap">
-                    {user.hobbies.map(hobby => <span key={hobby} className="bg-background-secondary text-xs px-2 py-1 rounded-full">{hobby}</span>)}
+                    {user.hobbies.map(hobby => {
+                        const color = HOBBY_COLORS[hobby] || '#B8FF00';
+                        return <span key={hobby} className="text-xs px-3 py-1 rounded-full font-medium" style={{ backgroundColor: `${color}20`, color }}>{hobby}</span>;
+                    })}
                 </div>
                 <div className="flex justify-center gap-6 my-4">
-                    <div><strong className="block">{user.friendCount}</strong><span className="text-sm text-text-secondary">Friends</span></div>
-                    <div><strong className="block">{user.followerCount}</strong><span className="text-sm text-text-secondary">Followers</span></div>
+                    <div><strong className="block text-accent">{user.friendCount}</strong><span className="text-sm text-text-secondary">Friends</span></div>
+                    <div><strong className="block text-accent">{user.followerCount}</strong><span className="text-sm text-text-secondary">Followers</span></div>
                     <div>
                         <button onClick={() => setIsDeckModalOpen(true)} className="flex flex-col items-center hover:opacity-80 transition-opacity">
                             <strong className="block">{hobbiesDone}</strong>
@@ -111,14 +122,14 @@ interface TabSwitcherProps {
 const TabSwitcher: React.FC<TabSwitcherProps> = ({ activeTab, setActiveTab, isCurrentUser }) => (
     <div className="mt-6 border-t border-border flex-shrink-0">
         <div className="flex justify-around">
-            <button onClick={() => setActiveTab('posts')} className={`py-3 w-full font-semibold ${activeTab === 'posts' ? 'text-text-primary border-b-2 border-text-primary' : 'text-text-secondary'}`}>
+            <button onClick={() => setActiveTab('posts')} className={`py-3 w-full font-semibold transition-colors ${activeTab === 'posts' ? 'text-accent border-b-2 border-accent' : 'text-text-secondary'}`}>
                 Posts
             </button>
-            <button onClick={() => setActiveTab('friends')} className={`py-3 w-full font-semibold ${activeTab === 'friends' ? 'text-text-primary border-b-2 border-text-primary' : 'text-text-secondary'}`}>
+            <button onClick={() => setActiveTab('friends')} className={`py-3 w-full font-semibold transition-colors ${activeTab === 'friends' ? 'text-accent border-b-2 border-accent' : 'text-text-secondary'}`}>
                 Friends
             </button>
             {isCurrentUser && (
-                <button onClick={() => setActiveTab('saved')} className={`py-3 w-full font-semibold ${activeTab === 'saved' ? 'text-text-primary border-b-2 border-text-primary' : 'text-text-secondary'}`}>
+                <button onClick={() => setActiveTab('saved')} className={`py-3 w-full font-semibold transition-colors ${activeTab === 'saved' ? 'text-accent border-b-2 border-accent' : 'text-text-secondary'}`}>
                     Saved
                 </button>
             )}

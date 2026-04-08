@@ -43,7 +43,8 @@ export const TabBar: React.FC<TabBarProps> = ({ activeTab, onTabClick, badgeCoun
                             </span>
                         )}
                         <Icon className="w-7 h-7" filled={isActive} />
-                        <span className={`text-xs mt-1 ${isActive ? 'font-semibold' : 'font-medium'}`} >{label}</span>
+                        <span className={`text-xs mt-1 ${isActive ? 'font-semibold' : 'font-medium'}`}>{label}</span>
+                        {isActive && <div className="w-1 h-1 rounded-full bg-accent mt-0.5" />}
                     </button>
                 );
             })}

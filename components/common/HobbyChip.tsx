@@ -18,7 +18,7 @@ const Highlight: React.FC<HighlightProps> = ({ text, highlight }) => {
         <span>
             {parts.map((part, i) =>
                 regex.test(part) && highlight.toLowerCase().includes(part.toLowerCase()) ? (
-                    <span key={i} className="bg-yellow-500 text-black rounded">{part}</span>
+                    <span key={i} className="bg-lime-400 text-black rounded">{part}</span>
                 ) : (
                     part
                 )

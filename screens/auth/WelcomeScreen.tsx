@@ -7,7 +7,6 @@ interface WelcomeScreenProps {
 }
 
 const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onGoToLogin, onGoToCreateAccount }) => {
-    const title = 'Hobbiest';
     return (
         <div className="relative w-full h-full text-white overflow-hidden">
             <img
@@ -16,42 +15,42 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onGoToLogin, onGoToCreate
                 alt="Camera equipment"
                 onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = 'https://placehold.co/1887x2831/1a1a1a/ffffff?text=Image+Error'; }}
             />
-            <div className="absolute inset-0 bg-black/60" />
-            <div className="relative z-10 flex flex-col h-full justify-center items-center text-center px-8 pt-12 pb-24">
-                <div className="flex-grow flex flex-col justify-center items-center">
-                    <h1 className="text-8xl" style={{ fontFamily: '"Lobster", cursive', textShadow: '2px 2px 8px rgba(0,0,0,0.7)' }} aria-label={title}>
-                        {title.split('').map((char, index) => (
-                            <span
-                                key={index}
-                                className="inline-block animate-fade-in-up"
-                                style={{ animationDelay: `${index * 0.05}s` }}
-                            >
-                                {char}
-                            </span>
-                        ))}
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/30" />
+            <div className="absolute top-14 right-6 w-2.5 h-2.5 rounded-full bg-accent opacity-70 animate-neon-pulse" />
+            <div className="relative z-10 flex flex-col h-full px-8 pt-16 pb-10">
+                <div className="animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+                    <span className="badge-pill">Find Your Passion</span>
+                </div>
+                <div className="flex-grow flex flex-col justify-end pb-8">
+                    <h1
+                        className="text-7xl font-black leading-none tracking-tight animate-fade-in-up"
+                        style={{ fontFamily: '"Inter", sans-serif', animationDelay: '0.2s' }}
+                    >
+                        Hob<span className="text-accent">biest</span>
                     </h1>
                     <p
-                        className="mt-2 text-lg font-light tracking-wider animate-fade-in-up"
-                        style={{ animationDelay: `${title.length * 0.05 + 0.2}s` }}
+                        className="mt-4 text-base font-light text-gray-300 leading-relaxed max-w-xs animate-fade-in-up"
+                        style={{ animationDelay: '0.4s' }}
                     >
-                        Find your hobby
+                        Discover hobbies, find your people,{'\n'}build the life you actually want.
                     </p>
                 </div>
-                <div className="w-full max-w-sm space-y-4">
+                <div className="w-full space-y-3 animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
                     <button
                         onClick={onGoToCreateAccount}
-                        className="w-full bg-primary-button text-primary-button-text font-semibold py-4 rounded-full shadow-lg hover:bg-primary-button-hover transition-colors animate-fade-in-up"
-                        style={{ animationDelay: `${title.length * 0.05 + 0.4}s` }}
+                        className="w-full bg-primary-button text-primary-button-text font-bold py-4 rounded-2xl neon-glow hover:bg-primary-button-hover transition-all"
                     >
-                        Create Account
+                        Get Started
                     </button>
                     <button
                         onClick={onGoToLogin}
-                        className="w-full bg-black text-white border border-gray-500 font-semibold py-4 rounded-full shadow-lg hover:bg-gray-800 transition-colors animate-fade-in-up"
-                        style={{ animationDelay: `${title.length * 0.05 + 0.5}s` }}
+                        className="w-full bg-white/5 text-gray-300 border border-white/10 font-medium py-4 rounded-2xl hover:bg-white/10 transition-all"
                     >
-                        Log In
+                        I already have an account
                     </button>
+                    <p className="text-center text-xs text-gray-500 mt-4">
+                        By continuing you agree to our Terms & Privacy Policy
+                    </p>
                 </div>
             </div>
         </div>

@@ -18,7 +18,7 @@ const Highlight: React.FC<HighlightProps> = ({ text, highlight }) => {
         <span>
             {parts.map((part, i) =>
                 regex.test(part) && highlight.toLowerCase().includes(part.toLowerCase()) ? (
-                    <span key={i} className="bg-yellow-500 text-black rounded">{part}</span>
+                    <span key={i} className="bg-lime-400 text-black rounded">{part}</span>
                 ) : (
                     part
                 )
@@ -68,12 +68,17 @@ const FriendsTab: React.FC<FriendsTabProps> = ({ friends, onViewProfile, onAvata
             <div className="space-y-3">
                 {filteredFriends.map(friend => (
                     <div key={friend.id} className="bg-card rounded-xl p-3 flex items-center gap-4 cursor-pointer hover:bg-background-secondary transition-colors hover-lift">
-                        <img
-                            src={friend.avatar}
-                            alt={friend.name}
-                            className="w-12 h-12 rounded-full object-cover transition-transform duration-200 hover:scale-110"
-                            onClick={(e) => { e.stopPropagation(); onAvatarClick(friend.avatar); }}
-                        />
+                        <div className="relative flex-shrink-0">
+                            <img
+                                src={friend.avatar}
+                                alt={friend.name}
+                                className="w-12 h-12 rounded-full object-cover transition-transform duration-200 hover:scale-110"
+                                onClick={(e) => { e.stopPropagation(); onAvatarClick(friend.avatar); }}
+                            />
+                            {parseInt(friend.id.replace('f', '')) % 3 !== 0 && (
+                                <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-green-400 ring-2 ring-card" />
+                            )}
+                        </div>
                         <div className="flex-grow" onClick={() => onViewProfile(friend.id)}>
                             <div className="flex items-center gap-2 mb-1 flex-wrap">
                                 <p className="font-semibold text-text-primary truncate">

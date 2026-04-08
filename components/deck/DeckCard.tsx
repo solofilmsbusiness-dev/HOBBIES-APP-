@@ -43,7 +43,7 @@ export const DeckCard: React.FC<DeckCardProps> = ({ hobby, onRemove, isNew, show
                             </div>
                         ) : (
                             <>
-                                <div className="absolute top-2 right-2 bg-yellow-500/80 rounded-full px-2 py-0.5 text-xs font-bold">
+                                <div className="absolute top-2 right-2 bg-lime-500/80 rounded-full px-2 py-0.5 text-xs font-bold">
                                     PENDING
                                 </div>
                                 {onRemove && !hobby.isMystery && <button

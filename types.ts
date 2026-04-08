@@ -66,6 +66,14 @@ export interface User {
     votedOn?: string[];
 }
 
+export interface ChatMessage {
+    id: string;
+    senderId: string;
+    text: string;
+    timestamp: number;
+    read: boolean;
+}
+
 export interface Message {
     id: string;
     userId: string;
@@ -73,6 +81,25 @@ export interface Message {
     avatar: string;
     lastMessage: string;
     unread: boolean;
+    messages: ChatMessage[];
+    isTyping?: boolean;
+}
+
+export interface Notification {
+    id: string;
+    type: 'like' | 'comment' | 'friend_request' | 'friend_accept' | 'challenge' | 'event_reminder' | 'hobby_suggestion';
+    title: string;
+    body: string;
+    avatar?: string;
+    timestamp: number;
+    read: boolean;
+    actionId?: string;
+}
+
+export interface EventRSVP {
+    hobbyId: number | string;
+    status: 'going' | 'interested' | 'not_going';
+    rsvpDate: number;
 }
 
 export interface StoryItem {

@@ -50,6 +50,9 @@ export const SocialPostCard: React.FC<SocialPostCardProps> = ({ post, user, onTo
                     </div>
                 </div>
                 {post.image && <img src={post.image} alt="User post" className="rounded-lg mt-3 max-h-60 w-full object-cover cursor-pointer" onClick={() => onImageClick(post.image!)} />}
+                {post.likes > 20 && (
+                    <p className="text-xs text-text-tertiary mt-2">2 friends also liked this</p>
+                )}
                 <div className="flex items-center gap-4 mt-3">
                     <button onClick={() => onToggleLike(post.id)} className={`flex items-center gap-2 text-sm font-bold transition-colors z-10 relative ${post.liked ? 'text-accent' : 'text-text-secondary hover:text-accent'}`}>
                         <span className={`text-xl ${post.liked ? 'animate-pulse' : ''}`}>{post.liked ? '♥' : '♡'}</span>

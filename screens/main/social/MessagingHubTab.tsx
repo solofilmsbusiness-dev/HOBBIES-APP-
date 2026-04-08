@@ -57,6 +57,7 @@ const MessagesTabContent: React.FC<MessagesTabContentProps> = ({ messages, onVie
                 <div className="relative">
                     <img src={msg.avatar} alt={msg.name} className="w-14 h-14 rounded-full object-cover" />
                     {msg.unread && <span className="absolute top-0 right-0 block h-3 w-3 rounded-full bg-accent ring-2 ring-black" />}
+                    <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-green-400 ring-2 ring-card" />
                 </div>
                 <div className="flex-grow overflow-hidden">
                     <p className="font-bold text-text-primary truncate">{msg.name}</p>

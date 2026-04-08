@@ -10,7 +10,7 @@ interface StoryCircleProps {
 
 const StoryCircle: React.FC<StoryCircleProps> = ({ story, user, onStoryClick }) => (
     <div className="text-center flex-shrink-0 w-20" onClick={() => onStoryClick(story.userId)}>
-        <div className={`relative rounded-full p-0.5 ${story.hasUnseen ? 'bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500' : 'bg-gray-700'}`}>
+        <div className={`relative rounded-full p-0.5 ${story.hasUnseen ? 'bg-gradient-to-tr from-lime-400 via-emerald-400 to-cyan-400' : 'bg-gray-700'}`}>
             <img
                 src={user.avatar}
                 alt={user.name}
