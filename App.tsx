@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { Capacitor } from '@capacitor/core';
 import { SettingsProvider, useSettings } from './contexts/SettingsContext';
 import { Toast } from './components/common/Toast';
 import { AvatarModal } from './components/modals/AvatarModal';
@@ -308,6 +309,18 @@ const AppContent: React.FC = () => {
 };
 
 export default function App() {
+    const isNative = Capacitor.isNativePlatform();
+
+    if (isNative) {
+        return (
+            <SettingsProvider>
+                <div className="w-full h-full bg-background-primary flex flex-col" style={{ height: '100dvh' }}>
+                    <AppContent />
+                </div>
+            </SettingsProvider>
+        );
+    }
+
     return (
         <SettingsProvider>
             <div className="bg-gray-200 min-h-screen flex items-center justify-center p-8 font-sans">
