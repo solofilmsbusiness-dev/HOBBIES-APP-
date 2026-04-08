@@ -37,8 +37,8 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user, isCurrentUser, file
                 return <button onClick={() => onFriendAction('cancel', user.id)} className="bg-background-tertiary text-text-primary font-bold py-2 px-6 rounded-full hover:bg-opacity-80 transition-colors">Cancel Request</button>;
             case 'pending_incoming':
                 return (<div className="flex gap-2">
-                    <button onClick={() => onFriendAction('accept', user.id)} className="bg-green-500 text-white font-bold py-2 px-6 rounded-full">Accept</button>
-                    <button onClick={() => onFriendAction('decline', user.id)} className="bg-gray-600 text-white font-bold py-2 px-6 rounded-full">Decline</button>
+                    <button onClick={() => onFriendAction('accept', user.id)} className="bg-accent text-black font-bold py-2 px-6 rounded-full neon-glow">Accept</button>
+                    <button onClick={() => onFriendAction('decline', user.id)} className="bg-white/10 border border-white/10 text-white font-bold py-2 px-6 rounded-full">Decline</button>
                 </div>);
             default:
                 return <button onClick={() => onFriendAction('add', user.id)} className="bg-accent text-accent-text font-bold py-2 px-6 rounded-full hover:bg-opacity-80 transition-colors">Add Friend</button>;
@@ -48,7 +48,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user, isCurrentUser, file
     const ActionButtons = () => {
         if (isCurrentUser) {
             return (
-                <button onClick={onGoToSettings} className="bg-background-secondary text-text-primary font-bold py-2 px-6 rounded-full hover:bg-background-tertiary transition-colors">
+                <button onClick={onGoToSettings} className="bg-accent text-black font-black py-2 px-6 rounded-full neon-glow hover:bg-accent/90 transition-all">
                     Edit Profile
                 </button>
             );
@@ -56,7 +56,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user, isCurrentUser, file
         return (
             <>
                 <FriendActionButton />
-                <button onClick={() => onMessage(user.id)} className="bg-background-secondary text-text-primary font-bold py-2 px-6 rounded-full hover:bg-background-tertiary transition-colors">
+                <button onClick={() => onMessage(user.id)} className="bg-white/10 backdrop-blur-sm text-text-primary font-bold py-2 px-6 rounded-full border border-white/10 hover:bg-white/15 transition-colors">
                     Message
                 </button>
             </>
@@ -67,14 +67,15 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user, isCurrentUser, file
         <div className="flex-shrink-0">
             <div className="relative h-40">
                 <img src={user.banner} alt={`${user.name}'s banner`} className="w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-background-primary via-transparent to-transparent" />
                 <div className="absolute -bottom-12 left-1/2 -translate-x-1/2">
                     <div className="relative">
-                        <img src={user.avatar} alt={user.name} className="w-24 h-24 rounded-full object-cover border-4 border-background-primary" />
+                        <img src={user.avatar} alt={user.name} className={`w-24 h-24 rounded-full object-cover border-4 ${isCurrentUser ? 'border-accent' : 'border-background-primary'}`} style={isCurrentUser ? { boxShadow: '0 0 20px rgba(184, 255, 0, 0.3)' } : {}} />
                         <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-green-400 ring-3 ring-background-primary" />
                         {isCurrentUser && (
                             <>
                                 <input type="file" accept="image/*" className="hidden" ref={fileInputRef} onChange={handlePhotoUpload} />
-                                <button onClick={() => fileInputRef.current?.click()} className="absolute bottom-0 right-0 bg-primary-button text-primary-button-text rounded-full w-7 h-7 flex items-center justify-center">
+                                <button onClick={() => fileInputRef.current?.click()} className="absolute bottom-0 right-0 bg-accent text-black rounded-full w-7 h-7 flex items-center justify-center neon-glow">
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L14.732 3.732z" /></svg>
                                 </button>
                             </>
@@ -83,26 +84,29 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user, isCurrentUser, file
                 </div>
             </div>
             <div className="pt-16 text-center px-4">
-                <h1 className="text-2xl font-bold">{user.name}</h1>
+                <span className="badge-pill mb-2 inline-flex">Profile</span>
+                <h1 className="text-2xl font-black" style={{ fontFamily: '"Inter", sans-serif' }}>{user.name}</h1>
                 <p className="text-text-secondary">@{user.username}</p>
                 <p className="text-sm text-text-primary mt-2 max-w-md mx-auto">{user.bio}</p>
                 <div className="flex justify-center gap-2 mt-3 flex-wrap">
                     {user.hobbies.map(hobby => {
                         const color = HOBBY_COLORS[hobby] || '#B8FF00';
-                        return <span key={hobby} className="text-xs px-3 py-1 rounded-full font-medium" style={{ backgroundColor: `${color}20`, color }}>{hobby}</span>;
+                        return <span key={hobby} className="text-xs px-3 py-1 rounded-full font-medium border border-white/10 backdrop-blur-sm" style={{ backgroundColor: `${color}15`, color }}>{hobby}</span>;
                     })}
                 </div>
-                <div className="flex justify-center gap-6 my-4">
-                    <div><strong className="block text-accent">{user.friendCount}</strong><span className="text-sm text-text-secondary">Friends</span></div>
-                    <div><strong className="block text-accent">{user.followerCount}</strong><span className="text-sm text-text-secondary">Followers</span></div>
-                    <div>
-                        <button onClick={() => setIsDeckModalOpen(true)} className="flex flex-col items-center hover:opacity-80 transition-opacity">
-                            <strong className="block">{hobbiesDone}</strong>
-                            <div className="flex items-center gap-1">
-                                <TrophyIcon className="w-4 h-4 text-accent" />
-                                <span className="text-sm text-text-secondary">Deck</span>
-                            </div>
-                        </button>
+                <div className="flex justify-center my-4">
+                    <div className="flex gap-6 bg-white/10 backdrop-blur-sm border border-white/10 rounded-2xl px-6 py-3">
+                        <div><strong className="block text-accent">{user.friendCount}</strong><span className="text-sm text-text-secondary">Friends</span></div>
+                        <div><strong className="block text-accent">{user.followerCount}</strong><span className="text-sm text-text-secondary">Followers</span></div>
+                        <div>
+                            <button onClick={() => setIsDeckModalOpen(true)} className="flex flex-col items-center hover:opacity-80 transition-opacity">
+                                <strong className="block text-accent">{hobbiesDone}</strong>
+                                <div className="flex items-center gap-1">
+                                    <TrophyIcon className="w-4 h-4 text-accent" />
+                                    <span className="text-sm text-text-secondary">Deck</span>
+                                </div>
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div className="flex justify-center gap-4">
@@ -120,16 +124,16 @@ interface TabSwitcherProps {
 }
 
 const TabSwitcher: React.FC<TabSwitcherProps> = ({ activeTab, setActiveTab, isCurrentUser }) => (
-    <div className="mt-6 border-t border-border flex-shrink-0">
-        <div className="flex justify-around">
-            <button onClick={() => setActiveTab('posts')} className={`py-3 w-full font-semibold transition-colors ${activeTab === 'posts' ? 'text-accent border-b-2 border-accent' : 'text-text-secondary'}`}>
+    <div className="mt-6 px-4 flex-shrink-0">
+        <div className="p-1 bg-card rounded-full flex justify-between items-center gap-1">
+            <button onClick={() => setActiveTab('posts')} className={`w-full text-center py-2 rounded-full text-sm font-semibold transition-colors ${activeTab === 'posts' ? 'bg-accent/15 text-accent' : 'text-text-secondary hover:text-text-primary'}`}>
                 Posts
             </button>
-            <button onClick={() => setActiveTab('friends')} className={`py-3 w-full font-semibold transition-colors ${activeTab === 'friends' ? 'text-accent border-b-2 border-accent' : 'text-text-secondary'}`}>
+            <button onClick={() => setActiveTab('friends')} className={`w-full text-center py-2 rounded-full text-sm font-semibold transition-colors ${activeTab === 'friends' ? 'bg-accent/15 text-accent' : 'text-text-secondary hover:text-text-primary'}`}>
                 Friends
             </button>
             {isCurrentUser && (
-                <button onClick={() => setActiveTab('saved')} className={`py-3 w-full font-semibold transition-colors ${activeTab === 'saved' ? 'text-accent border-b-2 border-accent' : 'text-text-secondary'}`}>
+                <button onClick={() => setActiveTab('saved')} className={`w-full text-center py-2 rounded-full text-sm font-semibold transition-colors ${activeTab === 'saved' ? 'bg-accent/15 text-accent' : 'text-text-secondary hover:text-text-primary'}`}>
                     Saved
                 </button>
             )}
@@ -237,17 +241,17 @@ const ProfileScreen: React.FC<ProfileScreenProps> = (props) => {
                     {activeTab === 'posts' && (
                         <>
                         {isCurrentUser && (
-                             <form onSubmit={handlePost} className="bg-card p-3 rounded-2xl mb-4">
+                             <form onSubmit={handlePost} className="bg-card p-3 rounded-2xl border border-white/5 mb-4">
                                 <textarea
                                     value={newPostText}
                                     onChange={(e) => setNewPostText(e.target.value)}
                                     placeholder="Share what you made…"
-                                    className="w-full bg-background-secondary border border-border rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
+                                    className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent/30 transition-all placeholder-text-tertiary"
                                     rows={3}
                                 />
                                 {newPostImage && (
                                     <div className="mt-2 relative">
-                                        <img src={newPostImage} alt="Preview" className="rounded-lg max-h-40" />
+                                        <img src={newPostImage} alt="Preview" className="rounded-2xl max-h-40" />
                                         <button onClick={() => setNewPostImage(null)} className="absolute top-1 right-1 bg-black/50 text-white rounded-full w-6 h-6">&times;</button>
                                     </div>
                                 )}
@@ -259,10 +263,10 @@ const ProfileScreen: React.FC<ProfileScreenProps> = (props) => {
                                         className="hidden"
                                         ref={fileInputRef}
                                     />
-                                    <button type="button" onClick={() => fileInputRef.current?.click()} className="text-accent p-2 rounded-full hover:bg-background-tertiary">
+                                    <button type="button" onClick={() => fileInputRef.current?.click()} className="text-accent p-2 rounded-full hover:bg-accent/10 transition-colors">
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                                     </button>
-                                    <button type="submit" className="ml-auto bg-primary-button text-primary-button-text font-bold py-2 px-5 rounded-full hover:bg-primary-button-hover transition-colors">
+                                    <button type="submit" className="ml-auto bg-primary-button text-primary-button-text font-black py-2 px-5 rounded-full neon-glow hover:bg-primary-button-hover transition-all">
                                         Post
                                     </button>
                                 </div>

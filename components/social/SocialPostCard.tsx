@@ -28,7 +28,7 @@ export const SocialPostCard: React.FC<SocialPostCardProps> = ({ post, user, onTo
     };
 
     return (
-        <div className="w-full text-left bg-card rounded-2xl mb-4 overflow-hidden hover-lift">
+        <div className="w-full text-left bg-card rounded-2xl border border-white/5 mb-4 overflow-hidden hover-lift">
             <div className="p-4">
                 <div className="flex items-start gap-3">
                     {user && (
@@ -49,26 +49,26 @@ export const SocialPostCard: React.FC<SocialPostCardProps> = ({ post, user, onTo
                         <p className="text-text-primary my-2">{post.text}</p>
                     </div>
                 </div>
-                {post.image && <img src={post.image} alt="User post" className="rounded-lg mt-3 max-h-60 w-full object-cover cursor-pointer" onClick={() => onImageClick(post.image!)} />}
+                {post.image && <img src={post.image} alt="User post" className="rounded-2xl mt-3 max-h-60 w-full object-cover cursor-pointer" onClick={() => onImageClick(post.image!)} />}
                 {post.likes > 20 && (
-                    <p className="text-xs text-text-tertiary mt-2">2 friends also liked this</p>
+                    <p className="text-xs text-accent/70 mt-2">2 friends also liked this</p>
                 )}
                 <div className="flex items-center gap-4 mt-3">
                     <button onClick={() => onToggleLike(post.id)} className={`flex items-center gap-2 text-sm font-bold transition-colors z-10 relative ${post.liked ? 'text-accent' : 'text-text-secondary hover:text-accent'}`}>
                         <span className={`text-xl ${post.liked ? 'animate-pulse' : ''}`}>{post.liked ? '♥' : '♡'}</span>
                         {post.likes}
                     </button>
-                    <button onClick={() => setIsExpanded((v) => !v)} className="flex items-center gap-2 text-sm text-text-secondary hover:text-text-primary">
+                    <button onClick={() => setIsExpanded((v) => !v)} className="flex items-center gap-2 text-sm text-text-secondary hover:text-accent transition-colors">
                         <CommentIcon className="w-5 h-5" />
                         <span>{post.comments.length}</span>
                     </button>
-                    <button onClick={() => onToggleBookmark(post.id)} className="flex items-center gap-2 text-sm text-text-secondary hover:text-text-primary ml-auto">
+                    <button onClick={() => onToggleBookmark(post.id)} className="flex items-center gap-2 text-sm text-text-secondary hover:text-accent transition-colors ml-auto">
                         <BookmarkIcon className="w-5 h-5" filled={post.bookmarked} />
                     </button>
                 </div>
             </div>
             {isExpanded && (
-                <div className="px-4 pb-4 border-t border-border mt-2 pt-3">
+                <div className="px-4 pb-4 border-t border-white/5 mt-2 pt-3">
                     <div className="space-y-3 max-h-32 overflow-y-auto mb-3">
                         {post.comments.map((comment) => (
                             <div key={comment.id} className="text-sm">
@@ -83,9 +83,9 @@ export const SocialPostCard: React.FC<SocialPostCardProps> = ({ post, user, onTo
                             value={newComment}
                             onChange={(e) => setNewComment(e.target.value)}
                             placeholder="Add a comment..."
-                            className="flex-grow bg-background-secondary border border-border rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
+                            className="flex-grow bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent/30 transition-all"
                         />
-                        <button type="submit" className="bg-primary-button text-primary-button-text font-bold py-2 px-4 rounded-xl text-sm">
+                        <button type="submit" className="bg-primary-button text-primary-button-text font-black py-2 px-4 rounded-xl text-sm neon-glow">
                             Post
                         </button>
                     </form>

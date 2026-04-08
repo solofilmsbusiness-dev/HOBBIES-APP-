@@ -49,17 +49,17 @@ const FeedTab: React.FC<FeedTabProps> = ({ onViewProfile, allUsers, onToggleBook
             {challenges.map(challenge => (
                 <ChallengeCard key={challenge.id} challenge={challenge} onChallengeClick={onChallengeClick} />
             ))}
-            <form onSubmit={handlePost} className="bg-card p-3 rounded-2xl mb-4">
+            <form onSubmit={handlePost} className="bg-card p-3 rounded-2xl border border-white/5 mb-4">
                 <textarea
                     value={newPostText}
                     onChange={(e) => setNewPostText(e.target.value)}
                     placeholder="Share what you made…"
-                    className="w-full bg-background-secondary border border-border rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
+                    className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent/30 transition-all placeholder-text-tertiary"
                     rows={3}
                 />
                 {newPostImage && (
                     <div className="mt-2 relative">
-                        <img src={newPostImage} alt="Preview" className="rounded-lg max-h-40" />
+                        <img src={newPostImage} alt="Preview" className="rounded-2xl max-h-40" />
                         <button onClick={() => setNewPostImage(null)} className="absolute top-1 right-1 bg-black/50 text-white rounded-full w-6 h-6">&times;</button>
                     </div>
                 )}
@@ -71,10 +71,10 @@ const FeedTab: React.FC<FeedTabProps> = ({ onViewProfile, allUsers, onToggleBook
                         className="hidden"
                         ref={fileInputRef}
                     />
-                    <button type="button" onClick={() => fileInputRef.current?.click()} className="text-accent p-2 rounded-full hover:bg-background-tertiary">
+                    <button type="button" onClick={() => fileInputRef.current?.click()} className="text-accent p-2 rounded-full hover:bg-accent/10 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                     </button>
-                    <button type="submit" className="ml-auto bg-primary-button text-primary-button-text font-bold py-2 px-5 rounded-full hover:bg-primary-button-hover transition-colors">
+                    <button type="submit" className="ml-auto bg-primary-button text-primary-button-text font-black py-2 px-5 rounded-full neon-glow hover:bg-primary-button-hover transition-all">
                         Post
                     </button>
                 </div>

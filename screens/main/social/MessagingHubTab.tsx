@@ -56,12 +56,14 @@ const MessagesTabContent: React.FC<MessagesTabContentProps> = ({ messages, onVie
             <div key={msg.id} onClick={() => onViewChat(msg.userId)} className={`w-full bg-card rounded-2xl border p-3 flex items-center gap-3 cursor-pointer hover:border-white/10 transition-colors ${msg.unread ? 'border-l-2 border-l-accent border-white/5' : 'border-white/5'}`}>
                 <div className="relative">
                     <img src={msg.avatar} alt={msg.name} className="w-14 h-14 rounded-full object-cover" />
-                    {msg.unread && <span className="absolute top-0 right-0 block h-3 w-3 rounded-full bg-accent ring-2 ring-black" />}
                     <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-green-400 ring-2 ring-card" />
                 </div>
                 <div className="flex-grow overflow-hidden">
-                    <p className="font-bold text-text-primary truncate">{msg.name}</p>
-                    <p className={`text-sm truncate ${msg.unread ? 'text-text-primary' : 'text-text-tertiary'}`}>{msg.lastMessage}</p>
+                    <div className="flex items-center justify-between">
+                        <p className="font-bold text-text-primary truncate">{msg.name}</p>
+                        {msg.unread && <span className="w-2.5 h-2.5 rounded-full bg-accent flex-shrink-0 ml-2" />}
+                    </div>
+                    <p className={`text-sm truncate ${msg.unread ? 'text-text-primary font-medium' : 'text-text-tertiary'}`}>{msg.lastMessage}</p>
                 </div>
             </div>
         ))}
