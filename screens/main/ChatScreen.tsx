@@ -68,14 +68,14 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ chat, onBack, onSendMessage, sh
     return (
         <div className="relative w-full h-full bg-background-primary text-text-primary flex flex-col">
             {/* Header */}
-            <header className="flex items-center p-4 pt-12 border-b border-border bg-background-primary z-10">
+            <header className="flex items-center p-4 pt-12 border-b border-white/5 bg-background-primary z-10">
                 <button onClick={onBack} className="text-text-primary font-bold text-2xl mr-3">&larr;</button>
                 <div className="relative">
                     <img src={user.avatar} alt={user.name} className="w-10 h-10 rounded-full object-cover" />
                     <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-green-400 ring-2 ring-background-primary" />
                 </div>
                 <div className="ml-3 flex-grow">
-                    <h2 className="font-bold text-sm">{user.name}</h2>
+                    <h2 className="font-black text-base" style={{ fontFamily: '"Inter", sans-serif' }}>{user.name}</h2>
                     <div className="flex items-center gap-2">
                         <HobbyChip user={user} isClickable={false} />
                         {isTyping && <span className="text-[10px] text-accent animate-pulse">typing...</span>}
@@ -84,7 +84,7 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ chat, onBack, onSendMessage, sh
                 <div className="relative">
                     <button onClick={() => setMenuOpen(v => !v)} className="text-text-secondary font-bold text-xl w-8 h-8 flex items-center justify-center rounded-lg hover:bg-background-secondary">⋮</button>
                     {menuOpen && (
-                        <div className="absolute top-full right-0 mt-1 w-40 bg-card border border-border rounded-xl shadow-lg z-20 overflow-hidden">
+                        <div className="absolute top-full right-0 mt-1 w-40 bg-card border border-white/10 rounded-2xl shadow-lg z-20 overflow-hidden">
                             <button onClick={() => { showToast(`${user.name} has been blocked.`); setMenuOpen(false); }} className="block w-full text-left px-4 py-3 text-sm text-text-primary hover:bg-background-secondary transition-colors">Block User</button>
                             <button onClick={() => { showToast(`Chat with ${user.name} deleted.`); setMenuOpen(false); onBack(); }} className="block w-full text-left px-4 py-3 text-sm text-red-400 hover:bg-background-secondary transition-colors">Delete Chat</button>
                         </div>
@@ -134,9 +134,9 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ chat, onBack, onSendMessage, sh
                         <img src={user.avatar} alt="" className="w-7 h-7 rounded-full object-cover" />
                         <div className="bg-background-secondary rounded-2xl rounded-bl-md px-4 py-3">
                             <div className="flex gap-1">
-                                <span className="w-2 h-2 bg-text-tertiary rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                                <span className="w-2 h-2 bg-text-tertiary rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                                <span className="w-2 h-2 bg-text-tertiary rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                                <span className="w-2 h-2 bg-accent rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                                <span className="w-2 h-2 bg-accent rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                                <span className="w-2 h-2 bg-accent rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                             </div>
                         </div>
                     </div>
@@ -145,8 +145,8 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ chat, onBack, onSendMessage, sh
             </main>
 
             {/* Input */}
-            <footer className="p-3 border-t border-border bg-background-primary">
-                <div className="flex items-center gap-2 bg-background-secondary rounded-2xl px-4 py-2 border border-border">
+            <footer className="p-3 border-t border-white/5 bg-background-primary">
+                <div className="flex items-center gap-2 bg-white/5 rounded-2xl px-4 py-2 border border-white/10 focus-within:border-accent/40 focus-within:ring-1 focus-within:ring-accent/20 transition-all">
                     <input
                         ref={inputRef}
                         type="text"
@@ -159,7 +159,7 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ chat, onBack, onSendMessage, sh
                     <button
                         onClick={handleSend}
                         disabled={!inputText.trim()}
-                        className={`w-8 h-8 rounded-full flex items-center justify-center transition-all flex-shrink-0 ${inputText.trim() ? 'bg-accent text-black' : 'bg-background-tertiary text-text-tertiary'}`}
+                        className={`w-8 h-8 rounded-full flex items-center justify-center transition-all flex-shrink-0 ${inputText.trim() ? 'bg-accent text-black neon-glow' : 'bg-background-tertiary text-text-tertiary'}`}
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 19V5m0 0l-7 7m7-7l7 7" />

@@ -23,7 +23,7 @@ const RequestsTab: React.FC<RequestsTabProps> = ({ requests, outgoing, onFriendA
     return (
         <div className="pt-4 space-y-3">
             {allRequests.map(user => (
-                <div key={user.id} className="bg-card rounded-xl p-3 flex items-center gap-4">
+                <div key={user.id} className="bg-card rounded-2xl border border-white/5 p-3 flex items-center gap-3">
                     <img src={user.avatar} alt={user.name} className="w-12 h-12 rounded-full object-cover" />
                     <div className="flex-grow cursor-pointer" onClick={() => onViewProfile(user.id)}>
                         <p className="font-semibold text-text-primary">{user.name}</p>
@@ -32,7 +32,7 @@ const RequestsTab: React.FC<RequestsTabProps> = ({ requests, outgoing, onFriendA
                     <div className="flex gap-2">
                         {user.type === 'incoming' ? (
                             <>
-                                <button onClick={() => onFriendAction('accept', user.id)} className="bg-green-500 text-white font-bold px-3 py-1 rounded-lg text-sm">Accept</button>
+                                <button onClick={() => onFriendAction('accept', user.id)} className="bg-accent text-black font-bold px-3 py-1 rounded-lg text-sm">Accept</button>
                                 <button onClick={() => onFriendAction('decline', user.id)} className="bg-gray-600 text-white font-bold px-3 py-1 rounded-lg text-sm">Decline</button>
                             </>
                         ) : (
@@ -53,7 +53,7 @@ interface MessagesTabContentProps {
 const MessagesTabContent: React.FC<MessagesTabContentProps> = ({ messages, onViewChat }) => (
     <div className="space-y-2">
         {messages.map(msg => (
-            <div key={msg.id} onClick={() => onViewChat(msg.userId)} className="w-full bg-card rounded-xl p-3 flex items-center gap-4 cursor-pointer">
+            <div key={msg.id} onClick={() => onViewChat(msg.userId)} className={`w-full bg-card rounded-2xl border p-3 flex items-center gap-3 cursor-pointer hover:border-white/10 transition-colors ${msg.unread ? 'border-l-2 border-l-accent border-white/5' : 'border-white/5'}`}>
                 <div className="relative">
                     <img src={msg.avatar} alt={msg.name} className="w-14 h-14 rounded-full object-cover" />
                     {msg.unread && <span className="absolute top-0 right-0 block h-3 w-3 rounded-full bg-accent ring-2 ring-black" />}
@@ -85,7 +85,7 @@ const MessagingHubTab: React.FC<MessagingHubTabProps> = ({ messages, onViewChat,
     const InnerTabButton: React.FC<{ name: string; badgeCount: number }> = ({ name, badgeCount }) => (
         <button
             onClick={() => setActiveInnerTab(name)}
-            className={`relative w-full text-center py-2 rounded-full text-sm font-semibold transition-colors ${activeInnerTab === name ? 'bg-background-tertiary text-text-primary' : 'text-text-secondary hover:text-text-primary'}`}
+            className={`relative w-full text-center py-2 rounded-full text-sm font-semibold transition-colors ${activeInnerTab === name ? 'bg-accent/15 text-accent' : 'text-text-secondary hover:text-text-primary'}`}
         >
             {name}
             {badgeCount > 0 && (
@@ -103,7 +103,7 @@ const MessagingHubTab: React.FC<MessagingHubTabProps> = ({ messages, onViewChat,
                     <InnerTabButton name="Messages" badgeCount={badgeCounts.messages} />
                     <InnerTabButton name="Requests" badgeCount={badgeCounts.requests} />
                 </div>
-                <button onClick={onComposeNew} className="ml-4 bg-accent text-accent-text rounded-full w-10 h-10 flex items-center justify-center flex-shrink-0">
+                <button onClick={onComposeNew} className="ml-4 bg-accent text-accent-text rounded-full w-10 h-10 flex items-center justify-center flex-shrink-0 neon-glow">
                     <PlusIcon className="w-6 h-6" />
                 </button>
             </div>
